@@ -1,6 +1,6 @@
 import React from 'react';
 
-const ContactContent : React.FC = () => {
+const AboutContent : React.FC = () => {
     return (
         <section className="top-sales">
             <h2 className="text-center">О магазине</h2>
@@ -37,4 +37,4 @@ const ContactContent : React.FC = () => {
     );
 };
 
-export default ContactContent;
+export default AboutContent;
