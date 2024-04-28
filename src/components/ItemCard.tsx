@@ -1,5 +1,6 @@
 import React from 'react';
 import {ItemState} from "../models";
+import {Link} from "react-router-dom";
 
 const ItemCard : React.FC<{ item: ItemState }> = ({ item }) => {
     return (
@@ -9,7 +10,7 @@ const ItemCard : React.FC<{ item: ItemState }> = ({ item }) => {
             <div className="card-body">
                 <p className="card-text">{item.title}</p>
                 <p className="card-text">{`${item.price} руб.`}</p>
-                <a href="/products/1.html" className="btn btn-outline-primary">Заказать</a>
+                <Link to="/itet" className="btn btn-outline-primary">Заказать</Link>
             </div>
         </div>
     );

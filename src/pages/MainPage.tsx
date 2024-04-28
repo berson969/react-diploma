@@ -26,8 +26,6 @@ const MainPage : React.FC = () => {
 				</div>
 			</main>
 			<Footer />
-
-
 		</>
 	);
 };

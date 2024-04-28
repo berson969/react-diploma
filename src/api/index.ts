@@ -3,14 +3,12 @@ import {QueryState} from "../models";
 
 export const shopApi = createApi({
     reducerPath: 'shop',
+    tagTypes: ['Items'],
     baseQuery: fetchBaseQuery({baseUrl: import.meta.env.VITE_BASE_URL}),
 
     endpoints: (builder) => ({
         getTopSales: builder.query({
             query: () => `/top-sales`
-        }),
-        getCategories: builder.query({
-            query: () => `/categories`
         }),
         getItems: builder.query({
             query: ({ categoryId, offset, searchPattern }: QueryState) => {
@@ -23,8 +21,18 @@ export const shopApi = createApi({
                     queryString  += `q=${searchPattern}&`;
                 }
                 return queryString.slice(0, -1);
-            }
+            },
+            providesTags: ['Items'],
+            invalidatesTags: [{
+                type: 'Items'
+            }]
         }),
+        getSingleItem: builder.query({
+            query: (id) => `/items/${id}`
+        })
+        // getCategories: builder.query({
+        //     query: () => `/categories`
+        // }),
         // getItemsFromCategory: builder.query({
         //     query: (categoryId) => `/items?categoryId=${categoryId}`
         // }),
@@ -34,9 +42,7 @@ export const shopApi = createApi({
         // getSearchItems: builder.query({
         //     query: (searchPattern) => `/items?q=${searchPattern}`
         // }),
-        getSingleItem: builder.query({
-            query: (id) => `/items/${id}`
-        })
+
     }),
 })
 
