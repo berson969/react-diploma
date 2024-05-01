@@ -181,9 +181,19 @@ section {
   margin-bottom: 1em;
 }
 
-.catalog-item-card .card-img-top {
-  height: 300px; /* Настройть на конкретную высоту */
+.item-image {
+  height: 300px;
   object-fit: cover;
+}
+
+.row-align {
+  align-items: stretch;
+}
+
+.card-col {
+  margin: 10px;
+  flex: 1 0 30%;
+
 }
 
 .catalog-item-size {

@@ -3,7 +3,6 @@ import {QueryState} from "../models";
 
 export const shopApi = createApi({
     reducerPath: 'shop',
-    tagTypes: ['Items'],
     baseQuery: fetchBaseQuery({baseUrl: import.meta.env.VITE_BASE_URL}),
 
     endpoints: (builder) => ({
@@ -22,39 +21,24 @@ export const shopApi = createApi({
                 }
                 return queryString.slice(0, -1);
             },
-            providesTags: ['Items'],
-            invalidatesTags: [{
-                type: 'Items'
-            }]
         }),
         getSingleItem: builder.query({
             query: (id) => `/items/${id}`
-        })
-        // getCategories: builder.query({
-        //     query: () => `/categories`
-        // }),
-        // getItemsFromCategory: builder.query({
-        //     query: (categoryId) => `/items?categoryId=${categoryId}`
-        // }),
-        // getNextItems: builder.query({
-        //     query: (offset) => `/items?offset=${offset}`
-        // }),
-        // getSearchItems: builder.query({
-        //     query: (searchPattern) => `/items?q=${searchPattern}`
-        // }),
-
+        }),
+        placeOrder: builder.mutation({
+            query: (orderData) => ({
+                url: '/order',
+                method: 'POST',
+                body: orderData,
+            }),
+        }),
     }),
 })
 
-export default shopApi;
-
 export const {
     useGetTopSalesQuery,
-    // useGetCategoriesQuery,
     useGetItemsQuery,
-    // useGetItemsFromCategoryQuery,
-    // useGetNextItemsQuery,
-    // useGetSearchItemsQuery,
-    useGetSingleItemQuery
+    useGetSingleItemQuery,
+    usePlaceOrderMutation,
 } = shopApi;
 

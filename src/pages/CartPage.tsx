@@ -2,9 +2,10 @@ import React from 'react';
 import Header from "../components/Header";
 import Banner from "../components/Banner";
 import Footer from "../components/Footer";
-import ItemDetails from "../components/ItemDetails";
+import Cart from "../components/Cart";
+import Order from "../components/Order";
 
-const ItemDetailsPage : React.FC = () => {
+const CartPage : React.FC = () => {
     return (
         <div>
             <Header />
@@ -12,7 +13,9 @@ const ItemDetailsPage : React.FC = () => {
                 <div className="row">
                     <div className="col">
                         <Banner />
-                        <ItemDetails />
+                        <Cart />
+                        <Order />
+
                     </div>
                 </div>
             </main>
@@ -21,4 +24,4 @@ const ItemDetailsPage : React.FC = () => {
     );
 };
 
-export default ItemDetailsPage;
+export default CartPage;

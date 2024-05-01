@@ -22,7 +22,7 @@ GET {{url}}/api/items?q=Кеды
 
 ###
 
-GET {{url}}/api/items?q=Черный&offset=6&categoryId=13
+GET {{url}}/api/items?offset=6&categoryId=13
 
 ###
 

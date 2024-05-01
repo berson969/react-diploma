@@ -4,13 +4,15 @@ import {Link} from "react-router-dom";
 
 const ItemCard : React.FC<{ item: ItemState }> = ({ item }) => {
     return (
-        <div className="card catalog-item-card">
+        <div className=" catalog-item-card">
             <img src={item.images[0]}
-                 className="card-img-top img-fluid" alt={item.title} />
+                 className="card-img-top img-fluid item-image"
+                 alt={item.title}
+            />
             <div className="card-body">
                 <p className="card-text">{item.title}</p>
                 <p className="card-text">{`${item.price} руб.`}</p>
-                <Link to="/itet" className="btn btn-outline-primary">Заказать</Link>
+                <Link to={`/catalog/${item.id}`} className="btn btn-outline-primary">Заказать</Link>
             </div>
         </div>
     );

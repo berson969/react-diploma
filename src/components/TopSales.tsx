@@ -13,9 +13,9 @@ const TopSales : React.FC = () => {
         data.length > 0 &&
             <section className="top-sales">
                 <h2 className="text-center">Хиты продаж!</h2>
-                <div className="row">
+                <div className="row row-align">
                     {data.map((item: ItemState) =>
-                        <div key={`ts-${item.id}`} className="col-4">
+                        <div key={`ts-${item.id}`} className="card card-col">
                             <ItemCard item={item} />
                         </div>
                     )}

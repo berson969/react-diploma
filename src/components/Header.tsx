@@ -1,8 +1,11 @@
 import React, {useState} from 'react';
 import NavBar from "./NavBar.tsx";
 import {Link} from "react-router-dom";
+import {useSelector} from "react-redux";
+import {CartCartState} from "../models";
 
 const Header: React.FC = () => {
+	const totalQuantity = useSelector((state: CartCartState )=> state.cart.totalQuantity);
 	const [visible, setVisible] = useState(false);
 	const toggleSearchForm = () => {
 		setVisible(!visible);
@@ -27,7 +30,8 @@ const Header: React.FC = () => {
 									></div>
                                     {/*Do programmatic navigation on click to /cart.html*/}
 									<div className="header-controls-pic header-controls-cart">
-										<div className="header-controls-cart-full">1</div>
+										{totalQuantity !== 0 &&
+											<div className="header-controls-cart-full">{totalQuantity}</div>}
 										<div className="header-controls-cart-menu"></div>
 									</div>
 								</div>
