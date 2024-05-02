@@ -2,13 +2,18 @@ import React, {useEffect} from 'react';
 import {Link} from "react-router-dom";
 import {CartCartState, ItemInCartState} from "../models";
 import {useDispatch, useSelector} from "react-redux";
-import {getCart, removeFromCartReducer, setCartTotals} from "../slices";
+import {getCart, removeFromCartReducer, selectCart, setCartTotals} from "../slices";
 
 const Cart : React.FC = () => {
     const dispatch = useDispatch();
-    const cart: ItemInCartState[] = useSelector((state: CartCartState )=> state.cart.cart);
-    console.log("CART", cart)
-    const totalPrice = useSelector((state: CartCartState )=> state.cart.totalPrice)
+    const cart: ItemInCartState[] = useSelector(selectCart);
+
+    const totalPrice = useSelector((state: CartCartState ) => state.carts.totalPrice)
+
+    useEffect(() => {
+        dispatch(getCart());
+        calculateTotal(cart);
+    }, []);
 
     useEffect(() => {
         dispatch(getCart());
@@ -26,8 +31,8 @@ const Cart : React.FC = () => {
         dispatch(setCartTotals({ totalPrice, totalQuantity }));
     };
 
-    const removeFromCart = (itemId: number) => {
-        dispatch(removeFromCartReducer(itemId))
+    const removeFromCart = (item: ItemInCartState) => {
+        dispatch(removeFromCartReducer(item))
     };
 
 
@@ -56,7 +61,7 @@ const Cart : React.FC = () => {
                             <td>{item.price}</td>
                             <td>{item.price * item.count}</td>
                             <td><button
-                                onClick={() => removeFromCart(item.id)}
+                                onClick={() => removeFromCart(item)}
                                 className="btn btn-outline-danger btn-sm"
                             >Удалить</button></td>
                         </tr>

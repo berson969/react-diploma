@@ -1,29 +1,31 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {useGetItemsQuery} from "../api";
 import {ItemState} from "../models";
 import Preloader from "./Preloader";
 import ItemCard from "./ItemCard";
+import {useDispatch, useSelector} from "react-redux";
+import {selectOptions, setQueryOptions} from "../slices";
 
 const Items : React.FC = () => {
-    const { data, isLoading } = useGetItemsQuery({ offset: 0 });
-    // const items: ItemsState = useSelector<ShopState>(selectItems)
-    // console.log("ITEMS",items)
-   //  const { data,  isLoading, error } = useGetItemsQuery({offset: 0});
-   //
-   // const dispatch = useDispatch();
+    const dispatch = useDispatch();
+    const options = useSelector(selectOptions);
+    const { data: items, isLoading, isError } = useGetItemsQuery({ ...options });
 
-    // useEffect(() => {
-    //     dispatch(data);
-    // }, []);
+    useEffect(() => {
+        if (items && items.length === 0) {
+            const newOptions = { ...options, offset: 0 };
+            dispatch(setQueryOptions(newOptions))
+        }
+    }, [options, items]);
 
-
-	console.log(data)
+	console.log("ITEMS", items, isError, isLoading)
     if (isLoading) return <Preloader />;
-    if (!data) return null;
+    if (isError) return <h2>Fetching Items Error </h2>
+    if (!items) return null;
     return (
-       data.length > 0 &&
+       items.length > 0 &&
             <div className="row row-align">
-                {data.map((item: ItemState) =>
+                {items.map((item: ItemState) =>
                     <div key={item.id} className="card card-col">
                      <ItemCard item={item} />
                     </div>

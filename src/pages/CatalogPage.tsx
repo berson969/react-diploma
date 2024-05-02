@@ -1,12 +1,12 @@
 import React from 'react';
-import Header from "../components/Header.tsx";
-import Banner from "../components/Banner.tsx";
-import Footer from "../components/Footer.tsx";
-import More from "../components/More.tsx";
-import TopSales from "../components/TopSales.tsx";
-import Search from "../components/Search.tsx";
-import Categories from "../components/Categories.tsx";
-import Items from "../components/Items.tsx";
+import Header from "../components/Header";
+import Banner from "../components/Banner";
+import Footer from "../components/Footer";
+import More from "../components/More";
+import TopSales from "../components/TopSales";
+import Categories from "../components/Categories";
+import Items from "../components/Items";
+import SearchForm from "../components/SearchForm";
 
 const CatalogPage : React.FC = () => {
     return (
@@ -19,7 +19,7 @@ const CatalogPage : React.FC = () => {
                         <section className="catalog">
                             <TopSales />
                             <h2 className="text-center">Каталог</h2>
-                            <Search />
+                            <SearchForm type='search-form' />
                             <Categories />
                             <Items />
                             <More />

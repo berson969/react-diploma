@@ -2,23 +2,22 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import {QueryState} from "../models";
 
 export const shopApi = createApi({
-    reducerPath: 'shop',
+    reducerPath: 'itemsReducer',
     baseQuery: fetchBaseQuery({baseUrl: import.meta.env.VITE_BASE_URL}),
 
     endpoints: (builder) => ({
         getTopSales: builder.query({
             query: () => `/top-sales`
         }),
+        getCategories: builder.query({
+            query: () => `/categories`
+        }),
         getItems: builder.query({
             query: ({ categoryId, offset, searchPattern }: QueryState) => {
                 let queryString = '/items?';
-                if (categoryId !== undefined) {
-                    queryString  += `categoryId=${categoryId}&`;
-                } else if (offset !== undefined) {
-                    queryString  += `offset=${offset}&`;
-                } else if (searchPattern !== undefined) {
-                    queryString  += `q=${searchPattern}&`;
-                }
+                queryString += !categoryId ? '' : `categoryId=${categoryId}&`;
+                queryString += !offset ? '' : `offset=${offset}&`;
+                queryString += !searchPattern ? '' : `q=${searchPattern}&`;
                 return queryString.slice(0, -1);
             },
         }),
@@ -37,6 +36,7 @@ export const shopApi = createApi({
 
 export const {
     useGetTopSalesQuery,
+    useGetCategoriesQuery,
     useGetItemsQuery,
     useGetSingleItemQuery,
     usePlaceOrderMutation,

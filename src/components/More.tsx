@@ -1,17 +1,22 @@
 import React, {useState} from 'react';
+import {selectOptions, setQueryOptions} from "../slices";
+import {useDispatch} from "react-redux";
 import {useGetItemsQuery} from "../api";
-import Preloader from "./Preloader.tsx";
 
 const More : React.FC = () => {
+    const dispatch = useDispatch();
     const [offset, setOffset] = useState(0);
-    const {  isLoading } = useGetItemsQuery({offset, categoryId: 13});
+    const { data: items } = useGetItemsQuery({ ...selectOptions });
 
     const handleClick = () => {
-        const newOffset: number = offset + 6;
-        setOffset(newOffset)
+        let newOffset = 0;
+        if (items.length > 0) {
+            newOffset = offset + 6;
+        }
+        setOffset(newOffset);
+        dispatch(setQueryOptions({ ...selectOptions, offset: newOffset }));
     }
 
-    if (isLoading) return <Preloader />;
     return (
         <div className="text-center">
             <button

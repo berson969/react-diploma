@@ -1,12 +1,20 @@
 import {createSlice} from "@reduxjs/toolkit";
 import {shopApi} from "../api";
-import {CartCartState, ItemInCartState} from "../models";
+import {CartCartState, CartState, ItemInCartState} from "../models";
 
-const initialState: CartCartState = {
-        // items : {},
+const initialState: CartState = {
+        items : {
+            data: [],
+        },
         cart: [],
+        categories: [],
         totalPrice: 0,
-        totalQuantity: 0
+        totalQuantity: 0,
+        options: {
+            offset: undefined,
+            categoryId: undefined,
+            searchPattern: undefined,
+        }
 }
 
 const getCartFromLocalStorage = () => {
@@ -15,9 +23,18 @@ const getCartFromLocalStorage = () => {
 }
 
 const shopSlice = createSlice({
-    name: 'Cart',
+    name: 'CartData',
     initialState,
     reducers: {
+        setQueryOptions: (state, action) => {
+            return {
+                ...state,
+                options: {
+                    ...state.options,
+                    ...action.payload
+                }
+            }
+        },
         getCart: (state) => {
             return {
                 ...state,
@@ -40,9 +57,12 @@ const shopSlice = createSlice({
             }
             localStorage.setItem('cart', JSON.stringify(state.cart));
         },
-        removeFromCartReducer: (state: CartCartState, action) => {
+        removeFromCartReducer: (state: CartState, action) => {
             const cartFromLocalStorage: ItemInCartState[] = getCartFromLocalStorage();
-            state.cart = cartFromLocalStorage.filter(item => item.id !== action.payload);
+            state.cart = cartFromLocalStorage.filter(item =>
+                item.id !== action.payload.id &&
+                item.size !== action.payload.size
+            );
             localStorage.setItem('cart', JSON.stringify(state.cart));
         },
         setCartTotals: (state, action) => {
@@ -51,6 +71,19 @@ const shopSlice = createSlice({
         },
     },
     extraReducers: (builder) => {
+        builder.addMatcher(shopApi.endpoints.getCategories.matchPending, (state, action) => {
+            console.log("getCategoriesPending", state.categories, action.payload)
+        });
+        builder.addMatcher(shopApi.endpoints.getCategories.matchFulfilled, (state, action) => {
+            console.log("getCategoriesSuccess", state.categories, action.payload)
+            state.categories = action.payload.data
+        });
+
+        builder.addMatcher(shopApi.endpoints.getItems.matchFulfilled, (state, action) => {
+            console.log("getItemsSuccess", state.items, action.payload)
+            state.items = action.payload
+        });
+
         builder.addMatcher(shopApi.endpoints.placeOrder.matchFulfilled, (state) => {
             console.log("Order body", state.cart )
             state.cart = [];
@@ -62,6 +95,7 @@ const shopSlice = createSlice({
 });
 
 export const {
+    setQueryOptions,
     getCart,
     addToCartReducer,
     removeFromCartReducer,
@@ -70,6 +104,7 @@ export const {
 
 export default shopSlice.reducer;
 
-export const selectCart = (state: ShopState) => state.cart;
+export const selectCart = (state: CartCartState) => state.carts.cart;
 
-export const selectItems = (state: ShopState) => state.items;
+export const selectItems = (state: CartCartState) => state.carts.items;
+export const selectOptions = (state: CartCartState) => state.carts.options;

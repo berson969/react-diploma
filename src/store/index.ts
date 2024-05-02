@@ -5,7 +5,7 @@ import RootReducer from "../slices";
 
 export const store = configureStore({
     reducer: {
-        cart: RootReducer,
+        carts: RootReducer,
         [shopApi.reducerPath]: shopApi.reducer,
     },
     middleware: (getDefaultMiddleware) =>

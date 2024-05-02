@@ -11,7 +11,7 @@ const ItemDetailsActions : React.FC<{ item: ItemDetailsState}> = ({item}) => {
     const [selectedSize, setSelectedSize] = useState('');
     const [quantity, setQuantity] = useState(1);
     const {  sizes,  } = item;
-    const sizesArray = sizes.filter(size => size.available);
+    const sizesArray = sizes.filter(size => size.available || !size.available);
 
     const handleSelectedSize = (size: string) => {
         setSelectedSize(size)
@@ -33,13 +33,14 @@ const ItemDetailsActions : React.FC<{ item: ItemDetailsState}> = ({item}) => {
         setSelectedSize('');
         navigate('/cart');
     }
-    // const cart = useSelector(selectCart)
-    // console.log("cart-cart", cart)
 
-    if (sizesArray.length === 0) return (
+    if (sizesArray.length === 0)
+        return (
         <div className="text-center">
             <p>Размеры в наличии:</p>
         </div>);
+
+
     return (
         <>
             <div className="text-center">

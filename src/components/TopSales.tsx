@@ -6,9 +6,9 @@ import ItemCard from "./ItemCard.tsx";
 
 const TopSales : React.FC = () => {
     const { data, isLoading, error } = useGetTopSalesQuery(undefined);
-    console.log(data, "load", isLoading, error)
 
     if (isLoading) return <Preloader />;
+    if (error) return <h2>{error.message}</h2>
     return (
         data.length > 0 &&
             <section className="top-sales">

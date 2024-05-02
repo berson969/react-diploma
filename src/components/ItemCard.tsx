@@ -6,7 +6,7 @@ const ItemCard : React.FC<{ item: ItemState }> = ({ item }) => {
     return (
         <div className=" catalog-item-card">
             <img src={item.images[0]}
-                 className="card-img-top img-fluid item-image"
+                 className="card-img-top img-fluid item-image img-thumbnail"
                  alt={item.title}
             />
             <div className="card-body">

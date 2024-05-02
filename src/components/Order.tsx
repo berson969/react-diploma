@@ -8,7 +8,7 @@ const Order : React.FC = () => {
     const [address, setAddress] = useState('');
     const [agreement, setAgreement] = useState(false);
 
-    const cart = useSelector((state: CartCartState) => state.cart.cart)
+    const cart = useSelector((state: CartCartState) => state.carts.cart)
     const [placeOrder, { isLoading, isSuccess, isError }]
         = usePlaceOrderMutation();
     console.log('usePlaceOrderMutation', isLoading, isSuccess, isError)
@@ -18,13 +18,6 @@ const Order : React.FC = () => {
             alert('Согласитесь с условиями доставки');
             return;
         }
-        console.log('cart', {
-            owner: {
-                phone,
-                address,
-            },
-            items: cart
-        })
         placeOrder({
             owner: {
                 phone,
@@ -32,6 +25,8 @@ const Order : React.FC = () => {
             },
             items: cart
         })
+        setPhone('');
+        setAddress('');
     }
 
     return (

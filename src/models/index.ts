@@ -7,15 +7,16 @@ export interface ItemState {
 }
 
 export interface ItemsState {
-    data?: ItemState[];
+    data: ItemState[];
     isLoading?: boolean;
     error?: string;
+    isError?: boolean;
 }
 
-export interface QueryState {
-    categoryId?: number;
-    offset?: number;
-    searchPattern?: string;
+export interface OptionsState {
+    categoryId: number | undefined;
+    offset: number | undefined;
+    searchPattern: string | undefined;
 }
 
 interface SizeType  {
@@ -47,13 +48,20 @@ export interface ItemInCartState {
     price: number;
 }
 
+interface Category {
+    id: number;
+    title: string;
+}
+
 export interface CartState {
     items?: ItemsState;
     cart: ItemInCartState[];
+    categories: Category[];
     totalPrice: number;
     totalQuantity: number;
+    options: OptionsState;
 }
 
 export interface CartCartState {
-    cart: CartState;
+    carts: CartState;
 }
