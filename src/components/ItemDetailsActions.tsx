@@ -1,25 +1,25 @@
 import React, {useState} from 'react';
 import {ItemDetailsState, ItemState} from "../models";
-import {addToCartReducer} from "../slices";
-import {useDispatch} from "react-redux";
+import {addToCart} from "../slices";
+import {useDispatch,} from "react-redux";
 import {useNavigate} from "react-router-dom";
+import QuantityIncDec from "./QuantityIncDec.tsx";
 
 const ItemDetailsActions : React.FC<{ item: ItemDetailsState}> = ({item}) => {
     const dispatch = useDispatch();
+	// dispatch(fetchCart());
+	// const cart: ItemInCartState[] = useSelector(selectCart);
     const navigate =useNavigate();
 
     const [selectedSize, setSelectedSize] = useState('');
-    const [quantity, setQuantity] = useState(1);
+	const [quantity, setQuantity] = useState(1);
     const {  sizes,  } = item;
-    const sizesArray = sizes.filter(size => size.available || !size.available);
+    const sizesArray = sizes.filter(size => size.available);
 
     const handleSelectedSize = (size: string) => {
         setSelectedSize(size)
     }
-    const decreaseQuantity = () => quantity > 1 ? setQuantity(quantity - 1) : null;
-    const increaseQuantity = () => quantity < 10 ? setQuantity(quantity + 1) : null;
-
-    const handleAddToCart = (item: ItemState) => {
+	const handleAddToCart = (item: ItemState) => {
         if (selectedSize === '') return;
         const itemInCart = {
             id: item.id,
@@ -28,7 +28,9 @@ const ItemDetailsActions : React.FC<{ item: ItemDetailsState}> = ({item}) => {
             count: quantity,
             price: item.price
         }
-        dispatch(addToCartReducer(itemInCart));
+		dispatch(addToCart(itemInCart));
+
+
         setQuantity(1);
         setSelectedSize('');
         navigate('/cart');
@@ -37,7 +39,7 @@ const ItemDetailsActions : React.FC<{ item: ItemDetailsState}> = ({item}) => {
     if (sizesArray.length === 0)
         return (
         <div className="text-center">
-            <p>Размеры в наличии:</p>
+            <p>Размеры в наличии: нет</p>
         </div>);
 
 
@@ -56,17 +58,7 @@ const ItemDetailsActions : React.FC<{ item: ItemDetailsState}> = ({item}) => {
                     )}
                 </p>
                 <p>Количество:
-                    <span className="btn-group btn-group-sm pl-2">
-                                <button
-                                    onClick={decreaseQuantity}
-                                    className="btn btn-secondary"
-                                >-</button>
-                                <span className="btn btn-outline-primary">{quantity}</span>
-                                <button
-                                    onClick={increaseQuantity}
-                                    className="btn btn-secondary"
-                                >+</button>
-                            </span>
+                    <QuantityIncDec quantity={quantity} setQuantity={setQuantity}/>
                 </p>
             </div>
             <button

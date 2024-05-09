@@ -3,15 +3,19 @@ import {useGetSingleItemQuery} from "../api";
 import Preloader from "./Preloader.tsx";
 import {useLocation} from "react-router-dom";
 import ItemDetailsActions from "./ItemDetailsActions.tsx";
+import Component404 from "./Component404.tsx";
+import {ItemDetailsState} from "../models";
 
 const ItemDetails : React.FC = () => {
     const location = useLocation();
 
-    const { data, isLoading } =
-        useGetSingleItemQuery(location.pathname.replace(/\D/g, ''));
-    console.log('item', data)
+    const { data, isLoading, error } =
+        useGetSingleItemQuery<ItemDetailsState>(location.pathname.replace(/\D/g, ''));
 
     if (isLoading) return <Preloader />;
+	if (error && error.status === 'FETCH_ERROR') return <Component404 />;
+	if (!data) return <div>No data available</div>;
+
     return (
         <section className="catalog-item">
             <h2 className="text-center">{data.title}</h2>

@@ -1,15 +1,12 @@
-import {createSlice} from "@reduxjs/toolkit";
+import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
 import {shopApi} from "../api";
-import {CartCartState, CartState, ItemInCartState} from "../models";
+import {CartCartState, CartState} from "../models";
 
 const initialState: CartState = {
         items : {
             data: [],
         },
         cart: [],
-        categories: [],
-        totalPrice: 0,
-        totalQuantity: 0,
         options: {
             offset: undefined,
             categoryId: undefined,
@@ -17,13 +14,21 @@ const initialState: CartState = {
         }
 }
 
-const getCartFromLocalStorage = () => {
-    const cartFromLocalStorage: string | null = localStorage.getItem('cart');
-    return cartFromLocalStorage ? JSON.parse(cartFromLocalStorage) : [];
-}
+export const fetchCart = createAsyncThunk(
+	'carts/fetchCart',
+	async () => {
+		try {
+			const cartFromLocalStorage: string | null = localStorage.getItem('cart');
+			return cartFromLocalStorage ? JSON.parse(cartFromLocalStorage) : [];
+		} catch (error) {
+			console.error('Failed to fetch cart:', error);
+			throw error;
+		}
+	}
+);
 
 const shopSlice = createSlice({
-    name: 'CartData',
+    name: 'carts',
     initialState,
     reducers: {
         setQueryOptions: (state, action) => {
@@ -35,48 +40,52 @@ const shopSlice = createSlice({
                 }
             }
         },
-        getCart: (state) => {
-            return {
-                ...state,
-                cart: getCartFromLocalStorage()
-            }
-        },
-        addToCartReducer: (state,action) => {
-            const cartFromLocalStorage: ItemInCartState[] = getCartFromLocalStorage();
-            const existingItemIndex = cartFromLocalStorage
+        addToCart: (state,action) => {
+            const existingItemIndex = state.cart
                 .findIndex(item =>
                     item.id === action.payload.id && item.size === action.payload.size
                 );
 
             if (existingItemIndex !==  -1) {
-                const updatedCart = [...cartFromLocalStorage];
+                const updatedCart = [...state.cart];
                 updatedCart[existingItemIndex].count += action.payload.count;
                 state.cart = updatedCart;
             } else {
-                state.cart = [...cartFromLocalStorage, action.payload];
+                state.cart = [...state.cart, action.payload];
             }
-            localStorage.setItem('cart', JSON.stringify(state.cart));
         },
-        removeFromCartReducer: (state: CartState, action) => {
-            const cartFromLocalStorage: ItemInCartState[] = getCartFromLocalStorage();
-            state.cart = cartFromLocalStorage.filter(item =>
+		updateToCart: (state, action) => {
+			const existingItemIndex = state.cart
+				.findIndex(item =>
+					item.id === action.payload.id && item.size === action.payload.size
+				);
+			if (existingItemIndex !==  -1) {
+				const updatedCart = [...state.cart];
+				updatedCart[existingItemIndex].count = action.payload.count;
+				state.cart = updatedCart;
+			}
+		},
+        removeFromCart: (state: CartState, action) => {
+            state.cart = state.cart.filter(item =>
                 item.id !== action.payload.id &&
                 item.size !== action.payload.size
             );
-            localStorage.setItem('cart', JSON.stringify(state.cart));
-        },
-        setCartTotals: (state, action) => {
-            state.totalPrice = action.payload.totalPrice;
-            state.totalQuantity = action.payload.totalQuantity;
         },
     },
     extraReducers: (builder) => {
+		builder.addCase(fetchCart.fulfilled, (state, action) => {
+			console.log("Fetch cart", state.cart, action.payload )
+			state.cart = action.payload ? action.payload : [];
+		});
+
         builder.addMatcher(shopApi.endpoints.getCategories.matchPending, (state, action) => {
-            console.log("getCategoriesPending", state.categories, action.payload)
+            console.log("getCategoriesPending", state,  action.payload);
+			// state.items = action.payload ? action.payload : [];
         });
+
         builder.addMatcher(shopApi.endpoints.getCategories.matchFulfilled, (state, action) => {
-            console.log("getCategoriesSuccess", state.categories, action.payload)
-            state.categories = action.payload.data
+            console.log("getCategoriesSuccess", state, action.payload)
+            // state.categories = action.payload.data
         });
 
         builder.addMatcher(shopApi.endpoints.getItems.matchFulfilled, (state, action) => {
@@ -87,24 +96,16 @@ const shopSlice = createSlice({
         builder.addMatcher(shopApi.endpoints.placeOrder.matchFulfilled, (state) => {
             console.log("Order body", state.cart )
             state.cart = [];
-            state.totalPrice = 0;
-            state.totalQuantity = 0;
             localStorage.removeItem('cart');
         });
     }
 });
-
 export const {
     setQueryOptions,
-    getCart,
-    addToCartReducer,
-    removeFromCartReducer,
-    setCartTotals,
+    addToCart,
+	updateToCart,
+    removeFromCart,
 } = shopSlice.actions;
-
 export default shopSlice.reducer;
-
 export const selectCart = (state: CartCartState) => state.carts.cart;
-
-export const selectItems = (state: CartCartState) => state.carts.items;
 export const selectOptions = (state: CartCartState) => state.carts.options;

@@ -1,23 +1,20 @@
 import React, {useState} from 'react';
-import {useGetCategoriesQuery, useGetItemsQuery} from "../api";
+import {useGetCategoriesQuery} from "../api";
 import Preloader from "./Preloader.tsx";
-import {selectOptions, setQueryOptions} from "../slices";
+import {setQueryOptions} from "../slices";
 import {useDispatch} from "react-redux";
-import {ItemsState} from "../models";
+import {CategoriesState} from "../models";
 
 const Categories: React.FC = () => {
     const dispatch = useDispatch();
-    const { data: categories } = useGetCategoriesQuery<ItemsState>(undefined);
-    console.log('categories', categories)
+    const { data: categories, isLoading, isError } = useGetCategoriesQuery<CategoriesState>(undefined);
     const [categoryId , setCategoryId] = useState<number | undefined>(undefined);
 
      const handleClick = (id: number | undefined) => {
          setCategoryId(id);
          dispatch(setQueryOptions({ categoryId: id, offset: 0 }));
-
      }
 
-    const {  isLoading, isError } = useGetItemsQuery({...selectOptions});
     if (isLoading) return <Preloader />;
     if (isError) return <div>Error fetching categories</div>;
     if (!categories) return null;

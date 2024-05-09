@@ -5,6 +5,7 @@ import Preloader from "./Preloader";
 import ItemCard from "./ItemCard";
 import {useDispatch, useSelector} from "react-redux";
 import {selectOptions, setQueryOptions} from "../slices";
+import Component404 from "./Component404.tsx";
 
 const Items : React.FC = () => {
     const dispatch = useDispatch();
@@ -18,9 +19,8 @@ const Items : React.FC = () => {
         }
     }, [options, items]);
 
-	console.log("ITEMS", items, isError, isLoading)
     if (isLoading) return <Preloader />;
-    if (isError) return <h2>Fetching Items Error </h2>
+    if (isError) return <Component404 />
     if (!items) return null;
     return (
        items.length > 0 &&

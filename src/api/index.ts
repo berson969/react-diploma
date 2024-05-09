@@ -1,8 +1,8 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import {QueryState} from "../models";
+import {OptionsState} from "../models";
 
 export const shopApi = createApi({
-    reducerPath: 'itemsReducer',
+    reducerPath: 'itemsQuery',
     baseQuery: fetchBaseQuery({baseUrl: import.meta.env.VITE_BASE_URL}),
 
     endpoints: (builder) => ({
@@ -13,7 +13,7 @@ export const shopApi = createApi({
             query: () => `/categories`
         }),
         getItems: builder.query({
-            query: ({ categoryId, offset, searchPattern }: QueryState) => {
+            query: ({ categoryId, offset, searchPattern }: OptionsState) => {
                 let queryString = '/items?';
                 queryString += !categoryId ? '' : `categoryId=${categoryId}&`;
                 queryString += !offset ? '' : `offset=${offset}&`;

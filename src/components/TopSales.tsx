@@ -8,7 +8,7 @@ const TopSales : React.FC = () => {
     const { data, isLoading, error } = useGetTopSalesQuery(undefined);
 
     if (isLoading) return <Preloader />;
-    if (error) return <h2>{error.message}</h2>
+    if (error) return <h2>Fetching TopSales Error</h2>
     return (
         data.length > 0 &&
             <section className="top-sales">

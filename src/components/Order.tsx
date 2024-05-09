@@ -11,7 +11,6 @@ const Order : React.FC = () => {
     const cart = useSelector((state: CartCartState) => state.carts.cart)
     const [placeOrder, { isLoading, isSuccess, isError }]
         = usePlaceOrderMutation();
-    console.log('usePlaceOrderMutation', isLoading, isSuccess, isError)
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         if (!agreement) {

@@ -1,10 +1,9 @@
 import React from 'react';
 import {useSelector} from "react-redux";
-import {CartCartState} from "../models";
 import {Link} from "react-router-dom";
-
+import {selectTotalQuantity} from "../selectors";
 const IconCart: React.FC = () => {
-    const totalQuantity = useSelector((state: CartCartState ) => state.carts.totalQuantity);
+    const totalQuantity = useSelector(selectTotalQuantity);
 
     return (
         <Link to="/cart" className="header-controls-pic header-controls-cart">
@@ -15,5 +14,4 @@ const IconCart: React.FC = () => {
         </Link>
     );
 };
-
 export default IconCart;

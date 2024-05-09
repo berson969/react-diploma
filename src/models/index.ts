@@ -9,7 +9,10 @@ export interface ItemState {
 export interface ItemsState {
     data: ItemState[];
     isLoading?: boolean;
-    error?: string;
+    error?: {
+		status: string;
+		error: string;
+	};
     isError?: boolean;
 }
 
@@ -40,6 +43,16 @@ export interface ItemDetailsState {
     sizes: SizeType[];
 }
 
+export interface ItemDetailsState {
+	data: ItemDetailsState;
+	isLoading?: boolean;
+	error?: {
+		status: string;
+		error: string;
+	};
+	isError?: boolean;
+}
+
 export interface ItemInCartState {
     id: number;
     title: string;
@@ -53,15 +66,27 @@ interface Category {
     title: string;
 }
 
+export interface CategoriesState {
+	data: Category[];
+	isLoading?: boolean;
+	isError?: boolean;
+}
+
 export interface CartState {
     items?: ItemsState;
     cart: ItemInCartState[];
-    categories: Category[];
-    totalPrice: number;
-    totalQuantity: number;
     options: OptionsState;
 }
 
 export interface CartCartState {
     carts: CartState;
+}
+
+export interface ActionState {
+	type: string;
+}
+
+export interface QuantityState {
+	quantity: number;
+	setQuantity: (value: number) => void;
 }
