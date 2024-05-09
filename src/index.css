@@ -191,8 +191,9 @@ section {
 }
 
 .card-col {
+	flex: 0 1 calc(32% - 10px);
   margin: 10px;
-  flex: 1 0 30%;
+  /*flex: 1 0 30%;*/
 
 }
 

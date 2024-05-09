@@ -7,7 +7,7 @@ const ItemCard : React.FC<{ item: ItemState }> = ({ item }) => {
         <div className=" catalog-item-card">
             <img src={item.images[0]}
                  className="card-img-top img-fluid item-image img-thumbnail"
-                 alt={item.title}
+                 alt="No Image"
             />
             <div className="card-body">
                 <p className="card-text">{item.title}</p>
