@@ -90,3 +90,8 @@ export interface QuantityState {
 	quantity: number;
 	setQuantity: (value: number) => void;
 }
+
+export interface EncryptData {
+	phone?: string;
+	address?: string;
+}

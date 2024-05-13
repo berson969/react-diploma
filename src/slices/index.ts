@@ -49,6 +49,7 @@ const shopSlice = createSlice({
             if (existingItemIndex !==  -1) {
                 const updatedCart = [...state.cart];
                 updatedCart[existingItemIndex].count += action.payload.count;
+				updatedCart[existingItemIndex].price = action.payload.price;
                 state.cart = updatedCart;
             } else {
                 state.cart = [...state.cart, action.payload];
@@ -62,6 +63,7 @@ const shopSlice = createSlice({
 			if (existingItemIndex !==  -1) {
 				const updatedCart = [...state.cart];
 				updatedCart[existingItemIndex].count = action.payload.count;
+				updatedCart[existingItemIndex].price = action.payload.price;
 				state.cart = updatedCart;
 			}
 		},

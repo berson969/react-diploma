@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import {usePlaceOrderMutation} from "../api";
 import {useSelector} from "react-redux";
 import {CartCartState} from "../models";
+import {encryptData} from "../crypto";
 
 const Order : React.FC = () => {
     const [phone, setPhone] = useState('');
@@ -19,8 +20,8 @@ const Order : React.FC = () => {
         }
         placeOrder({
             owner: {
-                phone,
-                address,
+                phone: encryptData({phone}),
+                address: encryptData({address}),
             },
             items: cart
         })
