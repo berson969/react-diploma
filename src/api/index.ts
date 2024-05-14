@@ -36,8 +36,6 @@ export const shopApi = createApi({
                 method: 'POST',
                 body: orderData,
             }},
-			retries: 3,
-			retryDelay,
         }),
     }),
 })
