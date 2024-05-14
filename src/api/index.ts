@@ -1,15 +1,17 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import {createApi, fetchBaseQuery, retry} from '@reduxjs/toolkit/query/react';
 import {OptionsState} from "../models";
 
-const retryDelay = 3 * 1000;
+const baseQuery = retry(fetchBaseQuery({baseUrl: import.meta.env.VITE_BASE_URL}), {
+	maxRetries: 5,
+});
+
 export const shopApi = createApi({
     reducerPath: 'itemsQuery',
-    baseQuery: fetchBaseQuery({baseUrl: import.meta.env.VITE_BASE_URL}),
+    baseQuery,
 
     endpoints: (builder) => ({
         getTopSales: builder.query({
             query: () => `/top-sales`,
-			options: { retries: 3, retryDelay },
         }),
         getCategories: builder.query({
             query: () => `/categories`
