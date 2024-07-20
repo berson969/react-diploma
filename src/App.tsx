@@ -1,6 +1,5 @@
 import {BrowserRouter, Route, Routes} from "react-router-dom";
 import MainPage from "./pages/MainPage.tsx";
-import "./index.css";
 import AboutPage from "./pages/AboutPage.tsx";
 import CatalogPage from "./pages/CatalogPage.tsx";
 import ContactsPage from "./pages/ContactsPage.tsx";
